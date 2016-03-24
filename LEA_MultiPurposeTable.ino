@@ -212,7 +212,7 @@ void drawActivePlayerColors(){
 ***********************************************************/
 
 void touchMonitor(){
-  // Read both digitial inputs for the RF remote buttons and store as state
+  // Read all inputs to see when the surface is touched (player error/out) 	
   if(contactYellow_state){
   		for(uint8_t n; n < playerYellow.numPixels(); n++) {
 		playerYellowRing.setPixelColor(n,0x00ffff); // Set everything to yellow
