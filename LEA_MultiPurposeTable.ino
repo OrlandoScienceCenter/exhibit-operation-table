@@ -11,17 +11,6 @@ activates and all player lights flash that color.
 When starting up game, each tong will plug in seperately, and
 illuminate the ring beneath it. 
 
-#define table surface pin connection 
-
-#define tong pin connection 1-4
-
-#define led ring pins
-
-#define sound trigger pins (i2c?) 
-
-#define reset pin
-
-#define power led pin
 */
 
 /* Fender-Style guitar jack pinout:
