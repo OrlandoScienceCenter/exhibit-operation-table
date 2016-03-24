@@ -108,10 +108,9 @@ Serial.begin(9600);
 ***********************************************************/
 void loop(){
 readSwitchStates() ;
+drawActivePlayerColors();
 readContactStates() ;
 touchMonitor();
-drawActivePlayerColors();
-
 }
 
 /***********************************************************
@@ -219,7 +218,12 @@ void touchMonitor(){
 			playerGreenRing.setPixelColor(n,0xffffff);
 			playerPurpleRing.setPixelColor(n,0xffffff);
 			}
+	playerYellowRing.show();
+	playerBlueRing.show();
+	playerGreenRing.show();
+	playerPurpleRing.show();
 	}
+	loop();;
   }
   if(contactBlue_state){
 	//I'd trigger the sound here if I decide 	
@@ -238,7 +242,12 @@ void touchMonitor(){
 			playerGreenRing.setPixelColor(n,0xffffff);
 			playerPurpleRing.setPixelColor(n,0xffffff);
 			}
+	playerYellowRing.show();
+	playerBlueRing.show();
+	playerGreenRing.show();
+	playerPurpleRing.show();		
 	}
+	loop();;
   }
     if(contactGreen_state){
 	//I'd trigger the sound here if I decide 	
@@ -257,8 +266,13 @@ void touchMonitor(){
 			playerGreenRing.setPixelColor(n,0xffffff);
 			playerPurpleRing.setPixelColor(n,0xffffff);
 			}
+	playerYellowRing.show();
+	playerBlueRing.show();
+	playerGreenRing.show();
+	playerPurpleRing.show();		
 	}
-  }
+	loop();;
+ }
     if(contactPurple_state){
 	//I'd trigger the sound here if I decide 	
 	for(uint8_t l; l < 5; l++){
@@ -276,14 +290,13 @@ void touchMonitor(){
 			playerGreenRing.setPixelColor(n,0xffffff);
 			playerPurpleRing.setPixelColor(n,0xffffff);
 			}
-	}
-  }
-
-
-    playerYellowRing.show();
+	playerYellowRing.show();
 	playerBlueRing.show();
 	playerGreenRing.show();
 	playerPurpleRing.show();
+	}
+	loop();;
   }
+ }
 
 
