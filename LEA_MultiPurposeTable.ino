@@ -162,7 +162,7 @@ void drawActivePlayerColors(){
 		}
 	}
 	else{
-		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
+		for(uint8_t 	n; n < playerYellowRing.numPixels(); n++) {
 		playerYellowRing.setPixelColor(n,0x000000);
 		}
 	}
