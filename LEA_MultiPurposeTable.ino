@@ -214,20 +214,20 @@ void drawActivePlayerColors(){
 void touchMonitor(){
   // Read both digitial inputs for the RF remote buttons and store as state
   if(contactYellow_state){
-	//Draw the pixels on all rings to flash yellow.
-	//cancel other input until end of flash sequence,
-	// then redraw to normal
-  }
-  if(contactGreen_state){
-  	//Draw the pixels on that ring to green
-  }
-  if(contactBlue_state){
-	//Draw the pixels on that ring to blue
-  }
-  if(contactPurple_state){
-	//Draw the pixels on ring to purple
-  }
-	// set to show all colors
+  		for(uint8_t n; n < playerYellow.numPixels(); n++) {
+		playerYellowRing.setPixelColor(n,0x00ffff); // Set everything to yellow
+	    playerBlueRing.setPixelColor(n,0x00ffff);
+		playerGreenRing.setPixelColor(n,0x00ffff);
+		playerPurpleRing.setPixelColor(n,0x00ffff);
+		delay(250);
+		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
+		playerBlueRing.setPixelColor(n,0x000000);
+		}
+	}
+
+
+
+
     playerYellowRing.show();
 	playerBlueRing.show();
 	playerGreenRing.show();
