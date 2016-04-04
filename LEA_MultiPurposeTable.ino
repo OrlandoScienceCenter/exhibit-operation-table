@@ -35,20 +35,20 @@ illuminate the ring beneath it.
 /***********************************************************
 *                         DEFINES                          *
 ***********************************************************/
-#define PLAYER_YELLOW_LEDPIN      12     // 
-#define PLAYER_GREEN_LEDPIN       11     // 
-#define PLAYER_BLUE_LEDPIN        10    // 
-#define PLAYER_PURPLE_LEDPIN      9
-#define PLAYER_YELLOW_CONTACT     8
-#define PLAYER_GREEN_CONTACT      7
-#define PLAYER_BLUE_CONTACT       6
-#define PLAYER_PURPLE_CONTACT     5
+#define PLAYER_YELLOW_LEDPIN      A0     // 
+#define PLAYER_GREEN_LEDPIN       A1     // 
+#define PLAYER_BLUE_LEDPIN        A2    // 
+#define PLAYER_PURPLE_LEDPIN      A3
+#define PLAYER_YELLOW_CONTACT     12
+#define PLAYER_GREEN_CONTACT      11
+#define PLAYER_BLUE_CONTACT       10
+#define PLAYER_PURPLE_CONTACT     9
 #define SOUND_TRIGGER_PIN		  3 	
-#define PLAYER_YELLOW_SWITCH      A4	
-#define PLAYER_GREEN_SWITCH       A3
-#define PLAYER_BLUE_SWITCH        A2
-#define PLAYER_PURPLE_SWITCH      A1
-#define DIAG_PIN                  A0
+#define PLAYER_YELLOW_SWITCH      8
+#define PLAYER_GREEN_SWITCH       7
+#define PLAYER_BLUE_SWITCH        6
+#define PLAYER_PURPLE_SWITCH      5
+#define DIAG_PIN                  13
 
 /***********************************************************
 *                      GLOBAL VARS                         *
@@ -76,41 +76,50 @@ boolean  switchPurple_state  = 0;       //
 void setup(){
 Serial.begin(9600);
 //Pin Mode Sets
-	pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
-	pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
-	pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
-	pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
 
 	pinMode(PLAYER_YELLOW_CONTACT, INPUT_PULLUP);
 	pinMode(PLAYER_GREEN_CONTACT, INPUT_PULLUP);
 	pinMode(PLAYER_BLUE_CONTACT, INPUT_PULLUP);
 	pinMode(PLAYER_PURPLE_CONTACT, INPUT_PULLUP);
 
-	pinMode(DIAG_PIN, INPUT_PULLUP);
+	pinMode(PLAYER_YELLOW_SWITCH, INPUT_PULLUP);	
+	pinMode(PLAYER_GREEN_SWITCH, INPUT_PULLUP);
+	pinMode(PLAYER_BLUE_SWITCH, INPUT_PULLUP);
+	pinMode(PLAYER_PURPLE_SWITCH, INPUT_PULLUP);
+	//pinMode(DIAG_PIN, INPUT_PULLUP);
 
-	pinMode(SOUND_TRIGGER_PIN, OUTPUT);
+	//pinMode(SOUND_TRIGGER_PIN, OUTPUT);
 //
-
+	delay(100);
 // Neopixel Initalize all pixels to off
 	playerYellowRing.begin();
 	playerBlueRing.begin();
 	playerGreenRing.begin();
 	playerPurpleRing.begin();
+	delay(100);
 	//
 	playerYellowRing.show();
 	playerBlueRing.show();
 	playerGreenRing.show();
 	playerPurpleRing.show();
+	//delay(1);
+Serial.println("Setup Completed");
 }
 
 /***********************************************************
 *                          LOOP                            *
 ***********************************************************/
 void loop(){
+	//Serial.println("looping");
+	delay(10);
 readSwitchStates() ;
 drawActivePlayerColors();
 readContactStates() ;
-touchMonitor();
+//touchMonitor();
 }
 
 /***********************************************************
@@ -118,23 +127,33 @@ touchMonitor();
 ***********************************************************/
 
 void readSwitchStates(){
-  // Read both digitial inputs for the RF remote buttons and store as state
-  switchYellow_state = digitalRead(PLAYER_YELLOW_SWITCH);
-  switchGreen_state = digitalRead(PLAYER_GREEN_SWITCH);
-  switchBlue_state = digitalRead(PLAYER_BLUE_SWITCH);
-  switchPurple_state = digitalRead(PLAYER_PURPLE_SWITCH);
-}
+  // Read all digitial inputs for the Jack Switches	
+  switchYellow_state = !digitalRead(PLAYER_YELLOW_SWITCH);
+  switchGreen_state = !digitalRead(PLAYER_GREEN_SWITCH);
+  switchBlue_state = !digitalRead(PLAYER_BLUE_SWITCH);
+  switchPurple_state = !digitalRead(PLAYER_PURPLE_SWITCH);
+	Serial.print("Switch States: ");
+	Serial.print(switchYellow_state);
+	Serial.print(switchGreen_state);
+	Serial.print(switchBlue_state);
+	Serial.println(switchPurple_state);
+  }
 
 /***********************************************************
 *                 readContactStates                         *
 ***********************************************************/
 
 void readContactStates(){
-  // Read both digitial inputs for the RF remote buttons and store as state
-  contactYellow_state = digitalRead(PLAYER_YELLOW_CONTACT);
-  contactGreen_state = digitalRead(PLAYER_GREEN_CONTACT);
-  contactBlue_state = digitalRead(PLAYER_BLUE_CONTACT);
-  contactPurple_state = digitalRead(PLAYER_PURPLE_CONTACT);
+  // Read all digitial inputs for the jack switches store as state
+  contactYellow_state = !digitalRead(PLAYER_YELLOW_CONTACT);
+  contactGreen_state = !digitalRead(PLAYER_GREEN_CONTACT);
+  contactBlue_state = !digitalRead(PLAYER_BLUE_CONTACT);
+  contactPurple_state = !digitalRead(PLAYER_PURPLE_CONTACT);
+  	Serial.print("contact States: ");
+	Serial.print(contactYellow_state);
+	Serial.print(contactGreen_state);
+	Serial.print(contactBlue_state);
+	Serial.println(contactPurple_state);
 }
 
 /***********************************************************
@@ -142,58 +161,63 @@ void readContactStates(){
 ***********************************************************/
 
 void drawActivePlayerColors(){
-
+Serial.println("DrawingPlayer Colors");
 // check for yellow player connection  
-	if(switchYellow_state){
-		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-		playerYellowRing.setPixelColor(n,0x00ffff);
+   if(switchYellow_state){
+  		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
+		playerYellowRing.setPixelColor(n,0x0000ff);
 		}
+		playerYellowRing.show();
 	}
 	else{
-		for(uint8_t 	n; n < playerYellowRing.numPixels(); n++) {
+		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
 		playerYellowRing.setPixelColor(n,0x000000);
 		}
+		playerYellowRing.show();
 	}
 // check for green player connection	
   if(switchGreen_state){
-  		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
-		playerGreenRing.setPixelColor(n,0x00ff00);
+  		for(uint8_t g; g < playerGreenRing.numPixels(); g++) {
+		playerGreenRing.setPixelColor(g,0x00ff00);
 		}
+		playerGreenRing.show();
 	}
 	else{
 		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
 		playerGreenRing.setPixelColor(n,0x000000);
 		}
+		playerGreenRing.show();
 	}
+	delay(5);
  // check for blue player connection	
   if(switchBlue_state){
   		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
-		playerBlueRing.setPixelColor(n,0x00ff00);
+		playerBlueRing.setPixelColor(n,0x0000ff);
 		}
+		playerBlueRing.show();
 	}
 	else{
 		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
 		playerBlueRing.setPixelColor(n,0x000000);
 		}
+		playerBlueRing.show();
 	}
  // check for purple player connection	
-  if(switchPurple_state){
+   if(switchPurple_state){
   		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-		playerPurpleRing.setPixelColor(n,0x00ff00);
+		playerPurpleRing.setPixelColor(n,0x0000ff);
 		}
+		playerPurpleRing.show();
 	}
 	else{
 		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-		playerGreenRing.setPixelColor(n,0x000000);
+		playerPurpleRing.setPixelColor(n,0x000000);
 		}
+		playerPurpleRing.show();
 	}
-   
-	// set to show all colors
-    playerYellowRing.show();
-	playerBlueRing.show();
-	playerGreenRing.show();
-	playerPurpleRing.show();
-  }
+  delay(5);
+ }
+
   
 /***********************************************************
 *                 touchMonitor                   *
@@ -201,7 +225,7 @@ void drawActivePlayerColors(){
 
 void touchMonitor(){
   // Read all inputs to see when the surface is touched (player error/out) 	
-  if(contactYellow_state){
+  if(!contactYellow_state){
 	//I'd trigger the sound here if I decide 	
 	for(uint8_t l; l < 5; l++){
 		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
@@ -225,7 +249,7 @@ void touchMonitor(){
 	}
 	loop();;
   }
-  if(contactBlue_state){
+  if(!contactBlue_state){
 	//I'd trigger the sound here if I decide 	
 	for(uint8_t l; l < 5; l++){
 		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
@@ -249,7 +273,7 @@ void touchMonitor(){
 	}
 	loop();;
   }
-    if(contactGreen_state){
+    if(!contactGreen_state){
 	//I'd trigger the sound here if I decide 	
 	for(uint8_t l; l < 5; l++){
 		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
@@ -273,7 +297,7 @@ void touchMonitor(){
 	}
 	loop();;
  }
-    if(contactPurple_state){
+    if(!contactPurple_state){
 	//I'd trigger the sound here if I decide 	
 	for(uint8_t l; l < 5; l++){
 		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
