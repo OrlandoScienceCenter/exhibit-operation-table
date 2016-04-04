@@ -58,15 +58,17 @@ Adafruit_NeoPixel playerGreenRing = Adafruit_NeoPixel(16, PLAYER_GREEN_LEDPIN, N
 Adafruit_NeoPixel playerBlueRing = Adafruit_NeoPixel(16, PLAYER_BLUE_LEDPIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel playerPurpleRing = Adafruit_NeoPixel(16, PLAYER_PURPLE_LEDPIN, NEO_GRB + NEO_KHZ800);
 
-boolean  contactYellow_state = 0;       // Init variables and Set initial contact states
-boolean  contactGreen_state	 = 0;       // Init variables and Set initial contact states
-boolean  contactBlue_state 	 = 0;       // Init variables and Set initial contact states
-boolean  contactPurple_state = 0;       // Init variables and Set initial contact states
+uint8_t  contactYellow_state = 0;       // Init variables and Set initial contact states
+uint8_t  contactGreen_state	 = 0;       // Init variables and Set initial contact states
+uint8_t  contactBlue_state 	 = 0;       // Init variables and Set initial contact states
+uint8_t  contactPurple_state = 0;       // Init variables and Set initial contact states
 
-boolean  switchYellow_state  = 0;       // Init variables and Set initial switch states
-boolean  switchGreen_state	 = 0;       // This is the jack's plug detection switch
-boolean  switchBlue_state 	 = 0;       // 
-boolean  switchPurple_state  = 0;       // 
+uint8_t  switchYellow_state  = 0;       // Init variables and Set initial switch states
+uint8_t  switchGreen_state	 = 0;       // This is the jack's plug detection switch
+uint8_t  switchBlue_state 	 = 0;       // 
+uint8_t  switchPurple_state  = 0;       // 
+
+uint8_t yellowRingState		 = 0;
 
 
 
@@ -76,10 +78,10 @@ boolean  switchPurple_state  = 0;       //
 void setup(){
 Serial.begin(9600);
 //Pin Mode Sets
-	pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
-	pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
-	pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
-	pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
+	//pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
+	///pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
+	///pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
 
 	pinMode(PLAYER_YELLOW_CONTACT, INPUT_PULLUP);
 	pinMode(PLAYER_GREEN_CONTACT, INPUT_PULLUP);
@@ -115,9 +117,11 @@ Serial.println("Setup Completed");
 ***********************************************************/
 void loop(){
 	//Serial.println("looping");
-	delay(100);
+	delay(1000);
 readSwitchStates() ;
 drawActivePlayerColors();
+readSwitchStates() ;
+killDisconnectedPlayers();
 ///readContactStates() ;
 //touchMonitor();
 }
@@ -132,11 +136,7 @@ void readSwitchStates(){
   switchGreen_state = !digitalRead(PLAYER_GREEN_SWITCH);
   switchBlue_state = !digitalRead(PLAYER_BLUE_SWITCH);
   switchPurple_state = !digitalRead(PLAYER_PURPLE_SWITCH);
-	Serial.print("Switch States: ");
-	Serial.print(switchYellow_state);
-	Serial.print(switchGreen_state);
-	Serial.print(switchBlue_state);
-	Serial.println(switchPurple_state);
+
   }
 
 /***********************************************************
@@ -161,50 +161,94 @@ void readContactStates(){
 ***********************************************************/
 
 void drawActivePlayerColors(){
-Serial.println("DrawingPlayer Colors");
+//Serial.println("DrawingPlayer Colors");
 // check for yellow player connection  
-   if(switchYellow_state){
-  		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-		playerYellowRing.setPixelColor(n,0xffff00);
-		}
-		playerYellowRing.show();
-	}
-// check for green player connection	
-  if(1){
-  		for(uint8_t g; g < playerGreenRing.numPixels(); g++) {
-		playerGreenRing.setPixelColor(g,0x00ff00);
-		}
-		playerGreenRing.show();
-	}
-	delay(5);
- // check for blue player connection	
-  if(1){
-  		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
-		playerBlueRing.setPixelColor(n,0x0000ff);
-		}
-		playerBlueRing.show();
-	}	
- // check for purple player connection	
-   if(1){
-  		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-		playerPurpleRing.setPixelColor(n,0x0000ff);
-		}
-		playerPurpleRing.show();
-	}
-//	else{
-//		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-//		playerPurpleRing.setPixelColor(n,0x000000);
-//		}
-//		playerPurpleRing.show();
-//	}
-  delay(5);
- }
 
+
+   if(switchYellow_state){
+	   //Serial.println("YellowConnected");
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,200,0);
+			playerYellowRing.show();
+			delay(1);
+		}
+ }
+//green player
+   if(switchGreen_state){
+	   //Serial.println("GreenConnected");
+		for(uint16_t i=0; i<playerGreenRing.numPixels(); i++) {
+			playerGreenRing.setPixelColor(i, 0,255,0);
+			playerGreenRing.show();
+			delay(1);
+		}
+ }
+//blue player
+   if(switchBlue_state){
+	   //Serial.println("BlueConnected");
+		for(uint16_t i=0; i<playerBlueRing.numPixels(); i++) {
+			playerBlueRing.setPixelColor(i, 0,0,255);
+			playerBlueRing.show();
+			delay(1);
+		}
+ } 
+//purple player
+   if(switchPurple_state){
+	   //Serial.println("PurpleConnected");
+		for(uint16_t i=0; i<playerPurpleRing.numPixels(); i++) {
+			playerPurpleRing.setPixelColor(i, 255,0,255);
+			playerPurpleRing.show();
+			delay(1);
+		}
+ }  
+ }  
+void killDisconnectedPlayers(){
+	/*
+	// now turn off old players who are no longer active
+*/  
+  if(switchYellow_state == 0){
+	   //Serial.println("YellowConnected");
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 0,0,0);
+			playerYellowRing.show();
+			delay(1);
+		}
+ }
+  if(switchGreen_state == 0){
+	   //Serial.println("GreenwConnected");
+		for(uint16_t i=0; i<playerGreenRing.numPixels(); i++) {
+			playerGreenRing.setPixelColor(i, 0,0,0);
+			playerGreenRing.show();
+			delay(1);
+		}
+ }
+ 
+// blue
+  if(switchBlue_state == 0){
+	   //Serial.println("BluewConnected");
+		for(uint16_t i=0; i<playerBlueRing.numPixels(); i++) {
+			playerBlueRing.setPixelColor(i, 0,0,0);
+			playerBlueRing.show();
+			delay(1);
+		}
+ } 
+// purple
+  if(switchPurple_state == 0){
+	   //Serial.println("PurplewConnected");
+		for(uint16_t i=0; i<playerPurpleRing.numPixels(); i++) {
+			playerPurpleRing.setPixelColor(i, 0,0,0);
+			playerPurpleRing.show();
+			delay(1);
+		}
+ } 
+
+ }  
   
+ /*
+ 
 /***********************************************************
 *                 touchMonitor                   *
 ***********************************************************/
-
+/*
 void touchMonitor(){
   // Read all inputs to see when the surface is touched (player error/out) 	
   if(!contactYellow_state){
@@ -304,5 +348,4 @@ void touchMonitor(){
 	loop();;
   }
  }
-
-
+ */
