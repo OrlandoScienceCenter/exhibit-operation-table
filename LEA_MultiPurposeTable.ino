@@ -76,10 +76,10 @@ boolean  switchPurple_state  = 0;       //
 void setup(){
 Serial.begin(9600);
 //Pin Mode Sets
-	//pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
-	//pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
-	//pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
-	//pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
+	pinMode(PLAYER_YELLOW_LEDPIN, OUTPUT);
+	pinMode(PLAYER_GREEN_LEDPIN, OUTPUT);
+	pinMode(PLAYER_BLUE_LEDPIN, OUTPUT);
+	pinMode(PLAYER_PURPLE_LEDPIN, OUTPUT);
 
 	pinMode(PLAYER_YELLOW_CONTACT, INPUT_PULLUP);
 	pinMode(PLAYER_GREEN_CONTACT, INPUT_PULLUP);
@@ -115,10 +115,10 @@ Serial.println("Setup Completed");
 ***********************************************************/
 void loop(){
 	//Serial.println("looping");
-	delay(10);
+	delay(100);
 readSwitchStates() ;
 drawActivePlayerColors();
-readContactStates() ;
+///readContactStates() ;
 //touchMonitor();
 }
 
@@ -149,11 +149,11 @@ void readContactStates(){
   contactGreen_state = !digitalRead(PLAYER_GREEN_CONTACT);
   contactBlue_state = !digitalRead(PLAYER_BLUE_CONTACT);
   contactPurple_state = !digitalRead(PLAYER_PURPLE_CONTACT);
-  	Serial.print("contact States: ");
-	Serial.print(contactYellow_state);
-	Serial.print(contactGreen_state);
-	Serial.print(contactBlue_state);
-	Serial.println(contactPurple_state);
+//  	Serial.print("contact States: ");
+//	Serial.print(contactYellow_state);
+//	Serial.print(contactGreen_state);
+//	Serial.print(contactBlue_state);
+//	Serial.println(contactPurple_state);
 }
 
 /***********************************************************
@@ -165,56 +165,38 @@ Serial.println("DrawingPlayer Colors");
 // check for yellow player connection  
    if(switchYellow_state){
   		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-		playerYellowRing.setPixelColor(n,0x0000ff);
-		}
-		playerYellowRing.show();
-	}
-	else{
-		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-		playerYellowRing.setPixelColor(n,0x000000);
+		playerYellowRing.setPixelColor(n,0xffff00);
 		}
 		playerYellowRing.show();
 	}
 // check for green player connection	
-  if(switchGreen_state){
+  if(1){
   		for(uint8_t g; g < playerGreenRing.numPixels(); g++) {
 		playerGreenRing.setPixelColor(g,0x00ff00);
 		}
 		playerGreenRing.show();
 	}
-	else{
-		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
-		playerGreenRing.setPixelColor(n,0x000000);
-		}
-		playerGreenRing.show();
-	}
 	delay(5);
  // check for blue player connection	
-  if(switchBlue_state){
+  if(1){
   		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
 		playerBlueRing.setPixelColor(n,0x0000ff);
 		}
 		playerBlueRing.show();
-	}
-	else{
-		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
-		playerBlueRing.setPixelColor(n,0x000000);
-		}
-		playerBlueRing.show();
-	}
+	}	
  // check for purple player connection	
-   if(switchPurple_state){
+   if(1){
   		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
 		playerPurpleRing.setPixelColor(n,0x0000ff);
 		}
 		playerPurpleRing.show();
 	}
-	else{
-		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-		playerPurpleRing.setPixelColor(n,0x000000);
-		}
-		playerPurpleRing.show();
-	}
+//	else{
+//		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
+//		playerPurpleRing.setPixelColor(n,0x000000);
+//		}
+//		playerPurpleRing.show();
+//	}
   delay(5);
  }
 
