@@ -117,13 +117,13 @@ Serial.println("Setup Completed");
 ***********************************************************/
 void loop(){
 	//Serial.println("looping");
-	delay(1000);
+	delay(0);
 readSwitchStates() ;
 drawActivePlayerColors();
 readSwitchStates() ;
 killDisconnectedPlayers();
-///readContactStates() ;
-//touchMonitor();
+readContactStates() ;
+touchMonitor();
 }
 
 /***********************************************************
@@ -184,9 +184,9 @@ void drawActivePlayerColors(){
  }
 //blue player
    if(switchBlue_state){
-	   //Serial.println("BlueConnected");
+	   //Serial.println("BlueConnected");	
 		for(uint16_t i=0; i<playerBlueRing.numPixels(); i++) {
-			playerBlueRing.setPixelColor(i, 0,0,255);
+			playerBlueRing.setPixelColor(i, 5,5,255);
 			playerBlueRing.show();
 			delay(1);
 		}
@@ -248,104 +248,138 @@ void killDisconnectedPlayers(){
 /***********************************************************
 *                 touchMonitor                   *
 ***********************************************************/
-/*
+
 void touchMonitor(){
+	uint8_t l = 0;
   // Read all inputs to see when the surface is touched (player error/out) 	
-  if(!contactYellow_state){
+  if(contactYellow_state){
 	//I'd trigger the sound here if I decide 	
-	for(uint8_t l; l < 5; l++){
-		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0x00ffff); // Set everything to yellow
-			playerBlueRing.setPixelColor(n,0x00ffff);
-			playerGreenRing.setPixelColor(n,0x00ffff);
-			playerPurpleRing.setPixelColor(n,0x00ffff);
+	for(l; l < 5; l++){
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,200,0);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,200,0);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,200,0);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,200,0);
+			playerPurpleRing.show();
+			}
+		delay(500);
+			//
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,255,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,255,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,255,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,255,255);
+			playerPurpleRing.show();
 			}
 		delay(250);
 			//
-		for(uint8_t n; n < playerYellowRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0xffffff); // Set everything to white
-			playerBlueRing.setPixelColor(n,0xffffff);
-			playerGreenRing.setPixelColor(n,0xffffff);
-			playerPurpleRing.setPixelColor(n,0xffffff);
-			}
-	playerYellowRing.show();
-	playerBlueRing.show();
-	playerGreenRing.show();
-	playerPurpleRing.show();
 	}
-	loop();;
+	delay(1000);
+	return;
   }
-  if(!contactBlue_state){
+////// GREEN CONTACT ///
+
+  if(contactGreen_state){
 	//I'd trigger the sound here if I decide 	
-	for(uint8_t l; l < 5; l++){
-		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0x00ff00); // Set everything to blue
-			playerBlueRing.setPixelColor(n,0x00ff00);
-			playerGreenRing.setPixelColor(n,0x00ff00);
-			playerPurpleRing.setPixelColor(n,0x00ff00);
+	for(l; l < 5; l++){
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 0,255,0);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 0,255,0);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 0,255,0);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 0,255,0);
+			playerPurpleRing.show();
+			}
+		delay(500);
+			//
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,255,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,255,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,255,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,255,255);
+			playerPurpleRing.show();
 			}
 		delay(250);
 			//
-		for(uint8_t n; n < playerBlueRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0xffffff); // Set everything to white
-			playerBlueRing.setPixelColor(n,0xffffff);
-			playerGreenRing.setPixelColor(n,0xffffff);
-			playerPurpleRing.setPixelColor(n,0xffffff);
-			}
-	playerYellowRing.show();
-	playerBlueRing.show();
-	playerGreenRing.show();
-	playerPurpleRing.show();		
 	}
-	loop();;
+	delay(1000);
+	return;
   }
-    if(!contactGreen_state){
+////// BLUE CONTACT ///
+
+  if(contactBlue_state){
 	//I'd trigger the sound here if I decide 	
-	for(uint8_t l; l < 5; l++){
-		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0x00ff00); // Set everything to blue
-			playerBlueRing.setPixelColor(n,0x00ff00);
-			playerGreenRing.setPixelColor(n,0x00ff00);
-			playerPurpleRing.setPixelColor(n,0x00ff00);
+	for(l; l < 5; l++){
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 5,5,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 5,5,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 5,5,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 5,5,255);
+			playerPurpleRing.show();
+			}
+		delay(500);
+			//
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,255,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,255,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,255,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,255,255);
+			playerPurpleRing.show();
 			}
 		delay(250);
 			//
-		for(uint8_t n; n < playerGreenRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0xffffff); // Set everything to white
-			playerBlueRing.setPixelColor(n,0xffffff);
-			playerGreenRing.setPixelColor(n,0xffffff);
-			playerPurpleRing.setPixelColor(n,0xffffff);
-			}
-	playerYellowRing.show();
-	playerBlueRing.show();
-	playerGreenRing.show();
-	playerPurpleRing.show();		
 	}
-	loop();;
- }
-    if(!contactPurple_state){
-	//I'd trigger the sound here if I decide 	
-	for(uint8_t l; l < 5; l++){
-		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0x00ff00); // Set everything to blue
-			playerBlueRing.setPixelColor(n,0x00ff00);
-			playerGreenRing.setPixelColor(n,0x00ff00);
-			playerPurpleRing.setPixelColor(n,0x00ff00);
-			}
-		delay(250);
-			//
-		for(uint8_t n; n < playerPurpleRing.numPixels(); n++) {
-			playerYellowRing.setPixelColor(n,0xffffff); // Set everything to white
-			playerBlueRing.setPixelColor(n,0xffffff);
-			playerGreenRing.setPixelColor(n,0xffffff);
-			playerPurpleRing.setPixelColor(n,0xffffff);
-			}
-	playerYellowRing.show();
-	playerBlueRing.show();
-	playerGreenRing.show();
-	playerPurpleRing.show();
-	}
-	loop();;
+	delay(1000);
+	return;
   }
- }
- */
+ ////// PURPLE CONTACT ///
+
+  if(contactPurple_state){
+	//I'd trigger the sound here if I decide 	
+	for(l; l < 5; l++){
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,0,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,0,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,0,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,0,255);
+			playerPurpleRing.show();
+			}
+		delay(500);
+			//
+		for(uint16_t i=0; i<playerYellowRing.numPixels(); i++) {
+			playerYellowRing.setPixelColor(i, 255,255,255);
+			playerYellowRing.show();
+			playerGreenRing.setPixelColor(i, 255,255,255);
+			playerGreenRing.show();
+			playerBlueRing.setPixelColor(i, 255,255,255);
+			playerBlueRing.show();
+			playerPurpleRing.setPixelColor(i, 255,255,255);
+			playerPurpleRing.show();
+			}
+		delay(250);
+			//
+	}
+	delay(1000);
+	return;
+  } 
+  }
